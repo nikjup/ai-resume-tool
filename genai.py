@@ -1,11 +1,15 @@
-
-import os
 from openai import OpenAI
-
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+import os
 
 def call_ai(resume_text, job_description, prompt):
+    api_key = os.getenv("OPENAI_API_KEY")
+
+    if not api_key:
+        return "Simulation Mode: AI not connected."
+
     try:
+        client = OpenAI(api_key=api_key)
+
         final_prompt = (
             prompt +
             "\n\nJob Description:\n" + job_description +
@@ -20,4 +24,4 @@ def call_ai(resume_text, job_description, prompt):
         return response.output_text
 
     except Exception:
-        return "Response generated (simulation mode)"
+        return "Simulation Mode: AI quota unavailable."
